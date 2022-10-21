@@ -41,3 +41,10 @@
 *  Setup articles module with entity and dto
 * ```npm i class-validator class-transformer```
 * Add CLI plugin to handle DTO's in swagger automatically
+
+### Elasticsearch
+* ```npm install @nestjs/elasticsearch @elastic/elasticsearch```
+* Create search module
+* "esModuleInterop": true
+* Implement Elasticsearch
+* Add healthcheck

@@ -4,6 +4,7 @@ import {
   HealthCheckService, HealthCheck,
   TypeOrmHealthIndicator, HttpHealthIndicator,
 } from '@nestjs/terminus';
+import { ElasticsearchHealthIndicator } from 'src/health/indicators/elasticsearch.health-indicator';
 
 @Controller('health')
 class HealthController {
@@ -11,6 +12,7 @@ class HealthController {
     private health: HealthCheckService,
     private typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private httpHealthIndicator: HttpHealthIndicator,
+    private elasticsearchHealthIndicator: ElasticsearchHealthIndicator,
   ) { }
 
   @Get()
@@ -18,15 +20,9 @@ class HealthController {
   check() {
     return this.health.check([
       () => this.typeOrmHealthIndicator.pingCheck('database'),
-      () => this.httpHealthIndicator.responseCheck(
-        'supertokens',
-        'http://localhost:3567/hello',
-        (res) => res.status === 200 && res.data === 'Hello\n',
-      ),
-      () => this.httpHealthIndicator.pingCheck(
-        'pgadmin',
-        'http://localhost:8080',
-      ),
+      () => this.httpHealthIndicator.pingCheck('supertokens', 'http://localhost:3567/hello'),
+      () => this.httpHealthIndicator.pingCheck('pgadmin', 'http://localhost:8080'),
+      () => this.elasticsearchHealthIndicator.isHealthy('elasticsearch')
     ]);
   }
 }

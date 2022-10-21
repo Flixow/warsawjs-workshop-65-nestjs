@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, Param, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Post, Query } from '@nestjs/common';
 
 import { ArticlesService } from 'src/articles/articles.service';
 import { CreateArticleDto } from 'src/articles/dto/create-article.dto';
@@ -10,7 +10,10 @@ export class ArticlesController {
   ) {}
 
   @Get('')
-  getAll() {
+  getAll(@Query('search') search: string) {
+    if (search) {
+      return this.articlesService.searchForArticles(search);
+    }
     return this.articlesService.getAll();
   }
 
