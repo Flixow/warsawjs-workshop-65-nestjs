@@ -2,13 +2,14 @@
 import { Controller, Get } from '@nestjs/common';
 import {
   HealthCheckService, HealthCheck,
-  HttpHealthIndicator,
+  TypeOrmHealthIndicator, HttpHealthIndicator,
 } from '@nestjs/terminus';
 
 @Controller('health')
 class HealthController {
   constructor(
     private health: HealthCheckService,
+    private typeOrmHealthIndicator: TypeOrmHealthIndicator,
     private httpHealthIndicator: HttpHealthIndicator,
   ) { }
 
@@ -16,6 +17,7 @@ class HealthController {
   @HealthCheck()
   check() {
     return this.health.check([
+      () => this.typeOrmHealthIndicator.pingCheck('database'),
       () => this.httpHealthIndicator.responseCheck(
         'supertokens',
         'http://localhost:3567/hello',

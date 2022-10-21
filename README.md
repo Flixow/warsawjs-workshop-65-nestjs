@@ -35,3 +35,9 @@
 * Setup [Supertokens frontend](https://supertokens.com/docs/thirdpartyemailpassword/pre-built-ui/setup/frontend)
 * Sign up, sign in, check cookies, guarded endpoint and database schema in pgAdmin
 * Add health checks
+
+### Typeorm
+* ```npm install @nestjs/typeorm typeorm pg```
+*  Setup articles module with entity and dto
+* ```npm i class-validator class-transformer```
+* Add CLI plugin to handle DTO's in swagger automatically

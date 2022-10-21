@@ -1,4 +1,5 @@
 import { NestFactory } from '@nestjs/core';
+import { ValidationPipe } from '@nestjs/common';
 import supertokens from 'supertokens-node';
 import { SwaggerModule, DocumentBuilder } from '@nestjs/swagger';
 
@@ -9,6 +10,11 @@ async function bootstrap() {
   const port = process.env.port || 3000;
 
   const app = await NestFactory.create(AppModule);
+
+  app.useGlobalPipes(new ValidationPipe({
+    whitelist: true,
+    transform: true,
+  }));
 
   app.enableCors({
     origin: [process.env.SUPERTOKENS_WEBSITE_DOMAIN],

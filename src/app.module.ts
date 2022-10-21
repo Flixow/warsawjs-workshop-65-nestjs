@@ -1,13 +1,14 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 
 import configuration from 'src/config/configuration';
 
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { AuthModule } from './auth/auth.module';
-import HealthController from './health/health.controller';
 import { HealthModule } from './health/health.module';
+import { ArticlesModule } from './articles/articles.module';
 
 @Module({
   imports: [
@@ -29,7 +30,26 @@ import { HealthModule } from './health/health.module';
       }),
       inject: [ConfigService],
     }),
+    TypeOrmModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => ({
+        type: 'postgres',
+        host: configService.get('DATABASE_HOST'),
+        port: configService.get('DATABASE_PORT'),
+        username: configService.get('DATABASE_USER'),
+        password: configService.get('DATABASE_PASSWORD'),
+        database: configService.get('DATABASE_NAME'),
+        entities: [
+          __dirname + './**/*.entity.ts',
+        ],
+        // Do not use in production. Use migrations instead!
+        synchronize: true,
+        autoLoadEntities: true,
+      })
+    }),
     HealthModule,
+    ArticlesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
