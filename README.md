@@ -48,3 +48,7 @@
 * "esModuleInterop": true
 * Implement Elasticsearch
 * Add healthcheck
+
+### Migrations
+* Setup data source
+* Setup npm scripts
